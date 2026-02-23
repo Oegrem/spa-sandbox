@@ -47,46 +47,25 @@ public class Program
 			NewLineOnAttributes = false
 		};
 
-		var columns = list.Chunk(ROWS_PER_PAGE);
-		var columns2 = list.Chunk(ROWS_PER_PAGE*COLUMNS);
+		var columns = list.Chunk(ROWS_PER_PAGE*COLUMNS);
 
 		using var writer = XmlWriter.Create(path, settings);
 
-		//what(writer, columns);
-		what2(writer, columns2);
+		WritePages(writer, columns);
 	}
 
-	private static void what(XmlWriter writer, IEnumerable<Pokemon[]> columns)
+	private static void WritePages(XmlWriter writer, IEnumerable<Pokemon[]> pages)
 	{
 		writer.WriteStartElement("html");
 		SetStyle(writer);
 		writer.WriteStartElement("body");
-
-		var even = true;
-		for(var i = 0; i < columns.Count(); i+=COLUMNS)
-		{
-			writer.WriteStartElement("div");
-			writer.WriteAttributeString("class", "tableWrapper");
-
-			for (var a = 0; a < COLUMNS && i+a < columns.Count(); a++)
-			{
-				writer.WriteStartElement("div");
-				AddTable(writer, [.. columns.ElementAt(i+a)], even);
-				even = !even;
-				writer.WriteEndElement();
-			}
-
-			writer.WriteEndElement();
-		}
+		
+		writer.WriteStartElement("script");
+		writer.WriteAttributeString("src", "index.js");
+		writer.WriteString("");
 		writer.WriteEndElement();
-		writer.WriteEndElement();
-	}
 
-	private static void what2(XmlWriter writer, IEnumerable<Pokemon[]> pages)
-	{
-		writer.WriteStartElement("html");
-		SetStyle(writer);
-		writer.WriteStartElement("body");
+		writer.WriteStartElement("form");
 
 		var even = true;
 		foreach(var page in pages)
@@ -105,6 +84,7 @@ public class Program
 			writer.WriteEndElement();
 		}
 
+		writer.WriteEndElement();
 		writer.WriteEndElement();
 		writer.WriteEndElement();
 	}
