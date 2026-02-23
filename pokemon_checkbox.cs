@@ -13,7 +13,7 @@ public class Program
 	public static void Main(string[] args)
 	{
 		var list = GetNames();
-		HtmlWriter("output.html", list);
+		HtmlWriter("index.html", list);
 	}
 
 	public static List<Pokemon> GetNames()
